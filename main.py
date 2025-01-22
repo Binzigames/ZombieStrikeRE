@@ -9,6 +9,8 @@ class Game:
 
     def Run(self):
         while not pr.window_should_close():
+            if pr.is_key_down(pr.KeyboardKey.KEY_F11):
+                pr.toggle_fullscreen()
             self.ScreenUpdate()
         pr.close_window()
 
@@ -28,6 +30,9 @@ class Game:
             if self.screen.finishScreen == 1:
                 self.screen.Unload()
                 pr.close_window()
+            elif self.screen.finishScreen == 2:
+                self.screen.Unload()
+                self.screen = Scenes.Game()
     
     
 
