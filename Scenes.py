@@ -1,5 +1,8 @@
 import pyray as pr
 import math
+import Common as Com
+
+import ZVOmbie as Vagner
 
 class Screen:
     def __init__(self):
@@ -164,12 +167,36 @@ class Game(Screen):
         self.gay = False # Ти для мене бужеш True
         self.trans = 0
         self.updateBulletButton = 0
+        self.updateProtectButton = 0
+        self.vagners = []
+        self.vagnerTime = 100
         pr.gui_set_font(self.font)
         pr.gui_set_style(0, pr.GuiDefaultProperty.TEXT_SIZE, 20)
 
     def Update(self):
         if self.gay == False:
             self.trans += 1
+            self.vagnerTime -= 1
+            if self.vagnerTime == 0:
+                self.vagnerTime = 100
+                self.vagners.append(Vagner.ZVOmbie())
+                print("Femboys if cumming")
+
+            for i in range(len(self.vagners)):
+                self.vagners[i].Update()
+            
+            if self.updateBulletButton == 1:
+                if Com.money >= Com.costUpdateBullet:
+                    Com.money -= Com.costUpdateBullet
+                    Com.costUpdateBullet += 100
+                    Com.updateBulletLevel += 1
+
+            if self.updateProtectButton == 1:
+                if Com.money >= Com.costProtectBullet:
+                    Com.money -= Com.costProtectBullet
+                    Com.costProtectBullet += 100
+                    Com.updateProtectLevel += 1
+
 
 
         if self.natural == 1 and self.gay == False:
@@ -183,15 +210,20 @@ class Game(Screen):
         pr.draw_texture(self.BGTexture, 0, 0, pr.WHITE)
         pr.draw_text(f"{self.gay}", 10, 10, 10, pr.WHITE)
         pr.draw_circle_v(pr.Vector2(300, 300 + 30 * math.cos(self.trans/30)), 10, pr.WHITE)
-        pr.draw_text("$: 0", 50, 10, 10, pr.GREEN)
+        pr.draw_text(f"$: {Com.money}", 50, 10, 10, pr.GREEN)
+
         self.updateBulletButton = pr.gui_button(pr.Rectangle(10, 30, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
         pr.draw_text_ex(self.font, "Bullet Update", pr.Vector2(40, 30), 20, 0, pr.WHITE)
-        pr.draw_text("Level: 0", 40, 50, 10, pr.WHITE)
+        pr.draw_text(f"Level: {Com.updateBulletLevel}", 40, 50, 10, pr.WHITE)
+        pr.draw_text(f"$: {Com.costUpdateBullet}", 80, 50, 10, pr.GREEN)
 
-        self.updateBulletButton = pr.gui_button(pr.Rectangle(10, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
+        self.updateProtectButton = pr.gui_button(pr.Rectangle(10, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
         pr.draw_text_ex(self.font, "Protect Update", pr.Vector2(40, 60), 20, 0, pr.WHITE)
-        pr.draw_text("Level: 0", 40, 80, 10, pr.WHITE)
+        pr.draw_text(f"Level: {Com.updateProtectLevel}", 40, 80, 10, pr.WHITE)
+        pr.draw_text(f"$: {Com.costProtectBullet}", 80, 80, 10, pr.GREEN)
         
+        for i in range(len(self.vagners)):
+            self.vagners[i].Draw()
         
         if self.gay == True:
             pr.draw_rectangle(0, 0, 800, 600, pr.Color(0, 0, 0, 150))
