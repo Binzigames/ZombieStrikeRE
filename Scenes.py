@@ -3,6 +3,7 @@ import math
 import Common as Com
 
 import ZVOmbie as Vagner
+import PPO
 
 class Screen:
     def __init__(self):
@@ -168,8 +169,14 @@ class Game(Screen):
         self.trans = 0
         self.updateBulletButton = 0
         self.updateProtectButton = 0
+        self.emo = 50
+        self.autoKillyourself = False
+        self.timeKillyourselflimit = 500
+        self.timeKillyourself = self.timeKillyourselflimit
+        self.costSlave = 50
         self.vagners = []
         self.vagnerTime = 100
+        self.bullets = []
         pr.gui_set_font(self.font)
         pr.gui_set_style(0, pr.GuiDefaultProperty.TEXT_SIZE, 20)
 
@@ -181,6 +188,24 @@ class Game(Screen):
                 self.vagnerTime = 100
                 self.vagners.append(Vagner.ZVOmbie())
                 print("Femboys if cumming")
+
+            if pr.is_mouse_button_pressed(pr.MouseButton.MOUSE_BUTTON_LEFT):
+                if self.emo >= 0:
+                    self.emo -= 1
+                    self.bullets.append(PPO.PPO())
+
+            if Com.costUpdateBullet > 1:
+                self.autoKillyourself = True
+
+            if self.autoKillyourself == True:
+                self.timeKillyourself -= 1
+                if self.timeKillyourself <= 0:
+                    self.timeKillyourself = self.timeKillyourselflimit
+                    self.emo -= 1
+                    self.bullets.append(PPO.PPO())
+
+            for i in range(len(self.bullets)):
+                self.bullets[i].Update(self.vagners)
 
             for i in range(len(self.vagners)):
                 self.vagners[i].Update()
@@ -196,6 +221,11 @@ class Game(Screen):
                     Com.money -= Com.costProtectBullet
                     Com.costProtectBullet += 100
                     Com.updateProtectLevel += 1
+
+            if self.emButton == 1:
+                if Com.money >= self.costSlave:
+                    Com.money -= self.costSlave
+                    self.emo += 50
 
 
 
@@ -221,10 +251,22 @@ class Game(Screen):
         pr.draw_text_ex(self.font, "Protect Update", pr.Vector2(40, 60), 20, 0, pr.WHITE)
         pr.draw_text(f"Level: {Com.updateProtectLevel}", 40, 80, 10, pr.WHITE)
         pr.draw_text(f"$: {Com.costProtectBullet}", 80, 80, 10, pr.GREEN)
+
+        self.emButton = pr.gui_button(pr.Rectangle(142, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
+        pr.draw_text_ex(self.font, "Ammo from Temu", pr.Vector2(182, 60), 20, 0, pr.WHITE)
+        pr.draw_text(f"$: {self.costSlave}", 242, 80, 10, pr.GREEN)
+
+        
+
         
         for i in range(len(self.vagners)):
             self.vagners[i].Draw()
-        
+
+        for i in range(len(self.bullets)):
+                self.bullets[i].Draw()
+
+        pr.draw_text(f"AMMO: {self.emo}", 100, 500, 10, pr.WHITE)
+
         if self.gay == True:
             pr.draw_rectangle(0, 0, 800, 600, pr.Color(0, 0, 0, 150))
             pr.draw_text_ex(self.font, "Trans Paused", pr.Vector2(50, 50), 50, 0, pr.WHITE) # Made by GAYmaster
