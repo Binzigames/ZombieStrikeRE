@@ -205,7 +205,7 @@ class Game(Screen):
                     self.bullets.append(PPO.PPO())
 
             for i in range(len(self.bullets)):
-                self.bullets[i].Update(self.vagners)
+                self.bullets[i].Update()
 
             for i in range(len(self.vagners)):
                 self.vagners[i].Update()
