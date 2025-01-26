@@ -3,12 +3,11 @@ import ZVOmbie as vagina
 
 
 class PPO:
-    def __init__(self):
-        self.x = 145
-        self.y = 470
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.destroyed = False  # Флаг для знищення кулі
         self.rectangle = pr.Rectangle(self.x, self.y, 3, 3)  # Рект кулі
-        self.vag = vagina.ZVOmbie()  # Ініціалізуємо ворога
 
     def Draw(self):
         if not self.destroyed:  # Малюємо тільки, якщо куля існує
@@ -16,10 +15,9 @@ class PPO:
 
     def Update(self):
         if not self.destroyed:  # Оновлення, якщо куля ще не знищена
-            self.x += 1  # Рух кулі
+            self.x += 5  # Рух кулі вперед
             self.rectangle = pr.Rectangle(self.x, self.y, 3, 3)  # Оновлюємо рект кулі
 
-            # Перевірка колізії з ворогом
-            if pr.check_collision_recs(self.rectangle, self.vag.rect):
-                self.destroyed = True  # Куля знищується
-                self.vag.destroyed = True  # Ворог теж знищується
+            # Перевірка, чи куля вийшла за межі екрану
+            if self.x > pr.get_screen_width():
+                self.destroyed = True  # Куля знищується, якщо вона вийшла за межі екрану

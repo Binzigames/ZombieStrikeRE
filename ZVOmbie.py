@@ -2,9 +2,9 @@ import pyray as pr
 
 
 class ZVOmbie:
-    def __init__(self):
-        self.x = 900
-        self.y = 460
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.destroyed = False
         self.textures = [pr.load_texture(f"Assets/game/enemy/Sprite-000{i}.png") for i in range(1, 5)]
         self.rect = pr.Rectangle(self.x, self.y, 29, 39)
@@ -13,9 +13,8 @@ class ZVOmbie:
 
     def Update(self):
         if not self.destroyed:
-            self.x -= 1
+            self.x -= 1  # Ворог рухається ліворуч
             self.rect = pr.Rectangle(self.x, self.y, 29, 39)
-
 
             self.frame += 1
             self.i = (self.frame // 10) % len(self.textures)
@@ -31,3 +30,5 @@ class ZVOmbie:
                 0,
                 pr.WHITE
             )
+
+

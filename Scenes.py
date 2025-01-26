@@ -2,6 +2,8 @@ from idlelib.mainmenu import menudefs
 
 import pyray as pr
 import math
+
+import Common
 import Common as Com
 
 import ZVOmbie as Vagner
@@ -193,13 +195,25 @@ class Game(Screen):
             self.vagnerTime -= 1
             if self.vagnerTime == 0:
                 self.vagnerTime = 100
-                self.vagners.append(Vagner.ZVOmbie())
+                self.vagners.append(Vagner.ZVOmbie(900 , 460))
                 print("Femboys if cumming")
 
             if pr.is_mouse_button_pressed(pr.MouseButton.MOUSE_BUTTON_LEFT):
                 if self.emo >= 0:
                     self.emo -= 1
-                    self.bullets.append(PPO.PPO())
+                    self.bullets.append(PPO.PPO(145,470))
+
+            for enemy in self.vagners:
+                enemy.Update()
+                enemy.Draw()
+
+            # Оновлюємо та малюємо кулі
+            for bullet in self.bullets:
+                bullet.Update()
+                bullet.Draw()
+
+            # Перевірка колізій
+            self.CheckCollisions()
 
             if Com.costUpdateBullet > 1:
                 self.autoKillyourself = True
@@ -209,7 +223,8 @@ class Game(Screen):
                 if self.timeKillyourself <= 0:
                     self.timeKillyourself = self.timeKillyourselflimit
                     self.emo -= 1
-                    self.bullets.append(PPO.PPO())
+                    self.bullets.append(PPO.PPO(145,470))
+
 
             for i in range(len(self.bullets)):
                 self.bullets[i].Update()
@@ -234,12 +249,26 @@ class Game(Screen):
                     Com.money -= self.costSlave
                     self.emo += 50
 
+            self.bullets = [bullet for bullet in self.bullets if not bullet.destroyed]
+            self.vagners = [enemy for enemy in self.vagners if not enemy.destroyed]
+
 
 
         if self.natural == 1 and self.gay == False:
             self.gay = True
         elif self.natural == 1 and self.gay == True:
             self.gay = False
+
+    def CheckCollisions(self):
+        # Перевірка колізій між кулею та ворогом
+        for bullet in self.bullets:
+            for enemy in self.vagners:
+                if not bullet.destroyed and not enemy.destroyed:
+                    if pr.check_collision_recs(bullet.rectangle, enemy.rect): 
+                        print("Collision detected!")
+                        bullet.destroyed = True
+                        Com.money += 10
+                        enemy.destroyed = True
 
     def Draw(self):
         pr.begin_drawing()

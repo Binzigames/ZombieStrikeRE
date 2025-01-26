@@ -5,23 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9796095e-b974-47a9-9f91-487ddfee3c08" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/choise.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sounds/choise_2.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundManager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/BulletUpgradeCan.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/BulletUpgradeCant.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/Button.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/SecurityUpgradeCan.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/bg_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/bullet-export.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/pause_button.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/game/securityUpgradeCant.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PPO.py" beforeDir="false" afterPath="$PROJECT_DIR$/PPO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Scenes.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scenes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshot000.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshot001.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZVOmbie.py" beforeDir="false" afterPath="$PROJECT_DIR$/ZVOmbie.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
