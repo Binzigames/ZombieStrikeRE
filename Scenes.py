@@ -1,9 +1,13 @@
+from idlelib.mainmenu import menudefs
+
 import pyray as pr
 import math
 import Common as Com
 
 import ZVOmbie as Vagner
 import PPO
+
+import SoundManager as SM
 
 class Screen:
     def __init__(self):
@@ -127,13 +131,16 @@ class Menu(Screen):
         self.count += 1
         if self.exitButton == 1:
             self.finishScreen = 1
+            SM.choise_button_sound(2)
 
         if self.playButton == 1:
             self.finishScreen = 2
+            SM.choise_button_sound(1)
 
         if self.settingsButton == 1:
             print("suka")
             self.settingstoggle = True
+            SM.choise_button_sound(1)
 
     def Draw(self):
         pr.begin_drawing()
@@ -256,9 +263,11 @@ class Game(Screen):
         pr.draw_text_ex(self.font, "Ammo from Temu", pr.Vector2(182, 60), 20, 0, pr.WHITE)
         pr.draw_text(f"$: {self.costSlave}", 242, 80, 10, pr.GREEN)
 
-        
 
-        
+
+
+
+
         for i in range(len(self.vagners)):
             self.vagners[i].Draw()
 
@@ -267,10 +276,19 @@ class Game(Screen):
 
         pr.draw_text(f"AMMO: {self.emo}", 100, 500, 10, pr.WHITE)
 
-        if self.gay == True:
+
+
+        if self.gay == True: #Konna GAYmaster
             pr.draw_rectangle(0, 0, 800, 600, pr.Color(0, 0, 0, 150))
-            pr.draw_text_ex(self.font, "Trans Paused", pr.Vector2(50, 50), 50, 0, pr.WHITE) # Made by GAYmaster
-        
+            pr.draw_text_ex(self.font, "Trans Paused", pr.Vector2(50, 50), 50, 0, pr.WHITE)
+            MenuButton = pr.gui_button(pr.Rectangle(300, 250, 200, 50), "Return to Menu")
+
+            if MenuButton == 1:
+                self.finishScreen = 1
+                SM.choise_button_sound(2)
+                print("return to Konnas Gachi House")
+
+
         self.natural = pr.gui_button(pr.Rectangle(800-50, 20, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_GEAR_BIG, ""))
         pr.end_drawing()
 

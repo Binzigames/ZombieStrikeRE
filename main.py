@@ -6,6 +6,7 @@ class Game:
         pr.init_window(800, 600, "ZombieStrikeRE")
         pr.set_target_fps(60)
         self.screen = Scenes.Logo()
+        pr.init_audio_device()
 
     def Run(self):
         while not pr.window_should_close():
