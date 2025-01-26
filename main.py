@@ -6,6 +6,8 @@ class Game:
         pr.init_window(800, 600, "ZombieStrikeRE")
         pr.set_target_fps(60)
         self.screen = Scenes.Logo()
+        self.ico = pr.load_image("Assets/ico.png")
+        pr.set_window_icon(self.ico)
         pr.init_audio_device()
 
     def Run(self):
@@ -38,6 +40,9 @@ class Game:
             if self.screen.finishScreen == 1:
                 self.screen.Unload()
                 self.screen = Scenes.Menu()
+            elif self.screen.finishScreen == 2:
+                self.screen.Unload()
+                self.screen = Scenes.GameOver()
     
     
 

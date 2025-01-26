@@ -76,7 +76,7 @@ class Logo2(Screen):
         super().__init__()
         self.screenId = 1
         self.texture1 = pr.load_texture("Assets/logo_porko.png")
-        self.texture2 = pr.load_texture("Assets/logo_ne.png")
+        self.texture2 = pr.load_texture("Assets/pigaysus_logo.png")
         self.font = pr.load_font("Assets/pizda.fnt")
         self.alpha = 0
         self.count = 300
@@ -99,7 +99,7 @@ class Logo2(Screen):
         pr.clear_background(pr.BLACK)
         pr.draw_text(f"{self.count}", 10, 10, 10, pr.WHITE)
         pr.draw_texture_pro(self.texture1, pr.Rectangle(0, 0, 440, 430), pr.Rectangle(200, 20, 440-100, 430-100), pr.Vector2(0, 0), 0, pr.Color(255, 255, 255, self.alpha))
-        pr.draw_texture_pro(self.texture2, pr.Rectangle(0, 0, 120, 139), pr.Rectangle(350, 400, 120+100, 139+100), pr.Vector2((120+100)/2, (139+100)/2), -15, pr.Color(255, 255, 255, self.alpha))
+        pr.draw_texture_pro(self.texture2, pr.Rectangle(0, 0, 883, 126), pr.Rectangle(200, 400, 120+400, 139+100), pr.Vector2((120+100)/2, (139+100)/2), 0, pr.Color(255, 255, 255, self.alpha))
         pr.draw_text_ex(self.font, "Guy who makes original game", pr.Vector2(150, 20), 25, 0, pr.Color(255, 255, 255, self.alpha))
         pr.draw_text_ex(self.font, "Guy who helps with remake of game", pr.Vector2(150, 270), 25, 0, pr.Color(255, 255, 255, self.alpha))
         pr.end_drawing()
@@ -128,6 +128,8 @@ class Menu(Screen):
         self.cloudTexture = pr.load_texture_from_image(self.cloud_image)
         pr.gui_set_font(self.font)
         pr.gui_set_style(0, pr.GuiDefaultProperty.TEXT_SIZE, 20)
+        self.optSelect = 0
+    
 
     def Update(self):
         self.count += 1
@@ -155,6 +157,26 @@ class Menu(Screen):
 
         if self.settingstoggle == True:
             result = pr.gui_window_box(pr.Rectangle(100, 100, 600, 300), "Settings")
+            self.listOptions = [f"Sounds: {Com.sounds}", "Music: "]
+
+            if pr.is_key_pressed(pr.KeyboardKey.KEY_DOWN):
+                self.optSelect += 1
+            elif pr.is_key_pressed(pr.KeyboardKey.KEY_UP):
+                self.optSelect -= 1
+
+            if pr.is_key_pressed(pr.KeyboardKey.KEY_ENTER):
+                if self.optSelect == 0 and Com.sounds == True:
+                    Com.sounds = False
+                else:
+                    Com.sounds = True
+
+            for i in range(len(self.listOptions)):
+                if self.optSelect == i:
+                    pr.draw_text(">>" + self.listOptions[i], 200, 125 + 25 * i, 20, pr.GRAY)
+                else:
+                    pr.draw_text(self.listOptions[i], 200, 125 + 25 * i, 20, pr.GRAY)
+
+
             if result == 1:
                 self.settingstoggle = False
             # Цей кал я хз як робити
@@ -184,21 +206,29 @@ class Game(Screen):
         self.timeKillyourself = self.timeKillyourselflimit
         self.costSlave = 50
         self.vagners = []
+        self.vagnersTimeLimit = 100
         self.vagnerTime = 100
         self.bullets = []
-        self.HP = 100
+        self.HP = Vagner.pHP
         self.minusHP = 5
         self.rectangleBase = pr.Rectangle(0, 400, 150, 100)
         pr.gui_set_font(self.font)
         pr.gui_set_style(0, pr.GuiDefaultProperty.TEXT_SIZE, 20)
+        Com.money = 100
+        Com.costUpdateBullet = 100
+        Com.costProtectBullet = 100
+        Com.updateBulletLevel = 1
+        Com.updateProtectLevel = 1
+
 
     def Update(self):
         if self.gay == False:
             self.trans += 1
             self.vagnerTime -= 1
             if self.vagnerTime == 0:
-                self.vagnerTime = 100
+                self.vagnerTime = self.vagnersTimeLimit
                 self.vagners.append(Vagner.ZVOmbie(900 , 460))
+                self.vagnersTimeLimit -= 1
                 print("Femboys if cumming")
 
             if pr.is_mouse_button_pressed(pr.MouseButton.MOUSE_BUTTON_LEFT):
@@ -210,7 +240,7 @@ class Game(Screen):
                     SM.choise_button_sound(4)
 
             for enemy in self.vagners:
-                enemy.Update(self.rectangleBase, self.HP)
+                enemy.Update()
                 enemy.Draw()
 
             # Оновлюємо та малюємо кулі
@@ -242,7 +272,7 @@ class Game(Screen):
                 self.bullets[i].Update()
 
             for i in range(len(self.vagners)):
-                self.vagners[i].Update(self.rectangleBase, self.HP)
+                self.vagners[i].Update()
             
             if self.updateBulletButton == 1:
                 if Com.money >= Com.costUpdateBullet:
@@ -264,6 +294,10 @@ class Game(Screen):
 
             self.bullets = [bullet for bullet in self.bullets if not bullet.destroyed]
             self.vagners = [enemy for enemy in self.vagners if not enemy.destroyed]
+
+            if Vagner.pHP == 0:
+                self.finishScreen = 2
+
 
 
 
@@ -302,9 +336,9 @@ class Game(Screen):
         pr.draw_text(f"Level: {Com.updateProtectLevel}", 40, 80, 10, pr.WHITE)
         pr.draw_text(f"$: {Com.costProtectBullet}", 80, 80, 10, pr.GREEN)
 
-        self.emButton = pr.gui_button(pr.Rectangle(142, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
+        self.emButton = pr.gui_button(pr.Rectangle(145, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
         pr.draw_text_ex(self.font, "Ammo from Temu", pr.Vector2(182, 60), 20, 0, pr.WHITE)
-        pr.draw_text(f"$: {self.costSlave}", 242, 80, 10, pr.GREEN)
+        pr.draw_text(f"$: {self.costSlave}", 180, 80, 10, pr.GREEN)
 
 
 
@@ -317,9 +351,8 @@ class Game(Screen):
         for i in range(len(self.bullets)):
                 self.bullets[i].Draw()
 
-        pr.draw_rectangle_rec(self.rectangleBase, pr.Color(255, 0, 0, 100))
         pr.draw_text(f"AMMO: {self.emo}", 100, 500, 10, pr.WHITE)
-        pr.draw_text(f"{self.HP}/100", 50, 400, 30, pr.RED)
+        pr.draw_text(f"HP:{Vagner.pHP}", 10, 400, 30, pr.RED)
 
 
 
@@ -336,6 +369,28 @@ class Game(Screen):
 
         self.natural = pr.gui_button(pr.Rectangle(800-50, 20, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_GEAR_BIG, ""))
         pr.end_drawing()
+
+    def Unload(self):
+        pass
+
+
+class GameOver(Screen):
+    def __init__(self):
+        super().__init__()
+        self.screenId = 4
+        self.font = pr.load_font("Assets/pizda.fnt")
+        pr.gui_set_font(self.font)
+        pr.gui_set_style(0, pr.GuiDefaultProperty.TEXT_SIZE, 20)
+        self.backButton = 0
+
+    def Update(self):
+        pass
+
+    def Draw(self):
+        pr.draw_text("GAME OVER", 10, 10, 50, pr.RED)
+        pr.draw_text(f"Money:{Com.money}", 10, 50, 20, pr.WHITE)
+        self.backButton = pr.gui_button(pr.Rectangle(10, 400, 100, 200), "Back to menu")
+
 
     def Unload(self):
         pass

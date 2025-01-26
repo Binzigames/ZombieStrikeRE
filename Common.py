@@ -1,3 +1,5 @@
+sounds = True
+
 money = 100
 costUpdateBullet = 100
 costProtectBullet = 100
