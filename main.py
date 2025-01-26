@@ -34,6 +34,10 @@ class Game:
             elif self.screen.finishScreen == 2:
                 self.screen.Unload()
                 self.screen = Scenes.Game()
+        elif self.screen.screenId == 3:
+            if self.screen.finishScreen == 1:
+                self.screen.Unload()
+                self.screen = Scenes.Menu()
     
     
 

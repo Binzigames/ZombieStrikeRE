@@ -186,6 +186,9 @@ class Game(Screen):
         self.vagners = []
         self.vagnerTime = 100
         self.bullets = []
+        self.HP = 100
+        self.minusHP = 5
+        self.rectangleBase = pr.Rectangle(0, 400, 150, 100)
         pr.gui_set_font(self.font)
         pr.gui_set_style(0, pr.GuiDefaultProperty.TEXT_SIZE, 20)
 
@@ -200,11 +203,14 @@ class Game(Screen):
 
             if pr.is_mouse_button_pressed(pr.MouseButton.MOUSE_BUTTON_LEFT):
                 if self.emo >= 0:
+                    SM.choise_button_sound(3)
                     self.emo -= 1
                     self.bullets.append(PPO.PPO(145,470))
+                else:
+                    SM.choise_button_sound(4)
 
             for enemy in self.vagners:
-                enemy.Update()
+                enemy.Update(self.rectangleBase, self.HP)
                 enemy.Draw()
 
             # Оновлюємо та малюємо кулі
@@ -215,28 +221,35 @@ class Game(Screen):
             # Перевірка колізій
             self.CheckCollisions()
 
-            if Com.costUpdateBullet > 1:
+            if Com.costUpdateBullet > 2:
                 self.autoKillyourself = True
 
             if self.autoKillyourself == True:
                 self.timeKillyourself -= 1
                 if self.timeKillyourself <= 0:
-                    self.timeKillyourself = self.timeKillyourselflimit
-                    self.emo -= 1
-                    self.bullets.append(PPO.PPO(145,470))
+                    if self.emo >= 0:
+                        SM.choise_button_sound(3)
+                        self.timeKillyourself = self.timeKillyourselflimit
+                        self.emo -= 1
+                        self.bullets.append(PPO.PPO(145,470))
+                    else:
+                        SM.choise_button_sound(4)
+                        print("Not enought emo, bum")
+                        self.timeKillyourself = self.timeKillyourselflimit
 
 
             for i in range(len(self.bullets)):
                 self.bullets[i].Update()
 
             for i in range(len(self.vagners)):
-                self.vagners[i].Update()
+                self.vagners[i].Update(self.rectangleBase, self.HP)
             
             if self.updateBulletButton == 1:
                 if Com.money >= Com.costUpdateBullet:
                     Com.money -= Com.costUpdateBullet
                     Com.costUpdateBullet += 100
                     Com.updateBulletLevel += 1
+                    self.timeKillyourselflimit -= 10
 
             if self.updateProtectButton == 1:
                 if Com.money >= Com.costProtectBullet:
@@ -266,6 +279,7 @@ class Game(Screen):
                 if not bullet.destroyed and not enemy.destroyed:
                     if pr.check_collision_recs(bullet.rectangle, enemy.rect): 
                         print("Collision detected!")
+                        SM.choise_button_sound(5)
                         bullet.destroyed = True
                         Com.money += 10
                         enemy.destroyed = True
@@ -303,11 +317,13 @@ class Game(Screen):
         for i in range(len(self.bullets)):
                 self.bullets[i].Draw()
 
+        pr.draw_rectangle_rec(self.rectangleBase, pr.Color(255, 0, 0, 100))
         pr.draw_text(f"AMMO: {self.emo}", 100, 500, 10, pr.WHITE)
+        pr.draw_text(f"{self.HP}/100", 50, 400, 30, pr.RED)
 
 
 
-        if self.gay == True: #Konna GAYmaster
+        if self.gay == True: #pegaysus GAYmaster
             pr.draw_rectangle(0, 0, 800, 600, pr.Color(0, 0, 0, 150))
             pr.draw_text_ex(self.font, "Trans Paused", pr.Vector2(50, 50), 50, 0, pr.WHITE)
             MenuButton = pr.gui_button(pr.Rectangle(300, 250, 200, 50), "Return to Menu")
