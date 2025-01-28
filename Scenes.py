@@ -97,7 +97,6 @@ class Logo2(Screen):
     def Draw(self):
         pr.begin_drawing()
         pr.clear_background(pr.BLACK)
-        pr.draw_text(f"{self.count}", 10, 10, 10, pr.WHITE)
         pr.draw_texture_pro(self.texture1, pr.Rectangle(0, 0, 440, 430), pr.Rectangle(200, 20, 440-100, 430-100), pr.Vector2(0, 0), 0, pr.Color(255, 255, 255, self.alpha))
         pr.draw_texture_pro(self.texture2, pr.Rectangle(0, 0, 883, 126), pr.Rectangle(200, 400, 120+400, 139+100), pr.Vector2((120+100)/2, (139+100)/2), 0, pr.Color(255, 255, 255, self.alpha))
         pr.draw_text_ex(self.font, "Guy who makes original game", pr.Vector2(150, 20), 25, 0, pr.Color(255, 255, 255, self.alpha))
@@ -247,11 +246,16 @@ class Game(Screen):
         if self.gay == False:
             self.trans += 1
             self.vagnerTime -= 1
-            if self.vagnerTime == 0:
+            if self.vagnerTime == 0 and not self.vagnerTime < 0 :
                 self.vagnerTime = self.vagnersTimeLimit
                 self.vagners.append(Vagner.ZVOmbie(900 , 460))
-                self.vagnersTimeLimit -= 1
-                print("Femboys if cumming")
+                if not self.vagnersTimeLimit == 0:
+                    self.vagnersTimeLimit -= 1
+                if self.vagnersTimeLimit == 0 :
+                    self.vagnersTimeLimit = 100
+
+
+
 
             if pr.is_mouse_button_pressed(pr.MouseButton.MOUSE_BUTTON_LEFT):
                 if self.emo >= 0:
@@ -333,8 +337,7 @@ class Game(Screen):
         for bullet in self.bullets:
             for enemy in self.vagners:
                 if not bullet.destroyed and not enemy.destroyed:
-                    if pr.check_collision_recs(bullet.rectangle, enemy.rect): 
-                        print("Collision detected!")
+                    if pr.check_collision_recs(bullet.rectangle, enemy.rect):
                         SM.choise_button_sound(5)
                         bullet.destroyed = True
                         Com.money += 10
@@ -344,7 +347,7 @@ class Game(Screen):
         pr.begin_drawing()
         pr.clear_background(pr.BLACK)
         pr.draw_texture(self.BGTexture, 0, 0, pr.WHITE)
-        pr.draw_text(f"{self.gay}", 10, 10, 10, pr.WHITE)
+        pr.draw_text(f"money : ", 10, 10, 10, pr.WHITE)
         pr.draw_circle_v(pr.Vector2(300, 300 + 30 * math.cos(self.trans/30)), 10, pr.WHITE)
         pr.draw_text(f"$: {Com.money}", 50, 10, 10, pr.GREEN)
 
@@ -354,9 +357,9 @@ class Game(Screen):
         pr.draw_text(f"$: {Com.costUpdateBullet}", 80, 50, 10, pr.GREEN)
 
 
-        self.emButton = pr.gui_button(pr.Rectangle(145, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
-        pr.draw_text_ex(self.font, "Ammo from Temu", pr.Vector2(182, 60), 20, 0, pr.WHITE)
-        pr.draw_text(f"$: {self.costSlave}", 180, 80, 10, pr.GREEN)
+        self.emButton = pr.gui_button(pr.Rectangle(145, 30, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
+        pr.draw_text_ex(self.font, "Ammo", pr.Vector2(182, 30), 20, 0, pr.WHITE)
+        pr.draw_text(f"$: {self.costSlave}", 180, 50, 10, pr.GREEN)
 
 
 
@@ -370,7 +373,7 @@ class Game(Screen):
                 self.bullets[i].Draw()
 
         pr.draw_text(f"AMMO: {self.emo}", 100, 500, 10, pr.WHITE)
-        pr.draw_text(f"HP:{Vagner.pHP}", 10, 400, 30, pr.RED)
+        pr.draw_text(f"HP:{Vagner.pHP}", 240, 30, 30, pr.WHITE)
 
 
 
@@ -400,16 +403,28 @@ class GameOver(Screen):
         pr.gui_set_font(self.font)
         pr.gui_set_style(0, pr.GuiDefaultProperty.TEXT_SIZE, 20)
         self.backButton = 0
+        self.count = 0
+        self.cloud_image = pr.load_image("Assets/cumulus-cloud.png")
+        pr.image_color_grayscale(self.cloud_image)
+        pr.image_blur_gaussian(self.cloud_image, 2)
+        pr.image_color_brightness(self.cloud_image, -200)
+        self.cloudTexture = pr.load_texture_from_image(self.cloud_image)
+
 
     def Update(self):
         if self.backButton == 1:
             self.finishScreen = 1
 
+        self.count += 1
+
     def Draw(self):
         pr.begin_drawing()
+        pr.draw_texture_ex(self.cloudTexture,
+                           pr.Vector2(-10 + 10 * math.cos(self.count / 120), -50 + 5 * math.sin(self.count / 120)),
+                           1 * math.cos(self.count / 120), 1, pr.WHITE)
         pr.clear_background(pr.BLACK)
         pr.draw_text("GAME OVER", 10, 10, 50, pr.RED)
-        pr.draw_text(f"Money:{Com.money}", 10, 50, 20, pr.WHITE)
+        pr.draw_text(f"Money:{Com.money}", 10, 60, 20, pr.WHITE)
         self.backButton = pr.gui_button(pr.Rectangle(10, 400, 200, 100), "Back to menu")
         pr.end_drawing()
 
