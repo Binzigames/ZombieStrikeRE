@@ -1,4 +1,5 @@
 sounds = True
+Diff = 1
 
 money = 100
 costUpdateBullet = 100

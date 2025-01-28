@@ -157,7 +157,7 @@ class Menu(Screen):
 
         if self.settingstoggle == True:
             result = pr.gui_window_box(pr.Rectangle(100, 100, 600, 300), "Settings")
-            self.listOptions = [f"Sounds: {Com.sounds}", "Music: "]
+            self.listOptions = [f"Sounds: {Com.sounds}", f"Difficulty: {Com.Diff}"]
 
             if pr.is_key_pressed(pr.KeyboardKey.KEY_DOWN):
                 self.optSelect += 1
@@ -169,6 +169,22 @@ class Menu(Screen):
                     Com.sounds = False
                 else:
                     Com.sounds = True
+
+            if pr.is_key_pressed(pr.KeyboardKey.KEY_LEFT) and self.optSelect == 1:
+                Com.Diff -= 1
+            elif pr.is_key_pressed(pr.KeyboardKey.KEY_RIGHT) and self.optSelect == 1:
+                Com.Diff += 1
+
+            if Com.Diff < 1:
+                Com.Diff = 3
+            if Com.Diff > 3:
+                Com.Diff = 1
+
+            if self.optSelect > 1:
+                self.optSelect = 0
+            if self.optSelect < 0:
+                self.optSelect = 1
+                
 
             for i in range(len(self.listOptions)):
                 if self.optSelect == i:
@@ -208,6 +224,12 @@ class Game(Screen):
         self.vagners = []
         self.vagnersTimeLimit = 100
         self.vagnerTime = 100
+        if Com.Diff == 1:
+            self.vagnersTimeLimit = 100
+        elif Com.Diff == 2:
+            self.vagnersTimeLimit = 80
+        elif Com.Diff == 3:
+            self.vagnersTimeLimit = 60
         self.bullets = []
         self.HP = Vagner.pHP
         self.minusHP = 5
@@ -331,10 +353,6 @@ class Game(Screen):
         pr.draw_text(f"Level: {Com.updateBulletLevel}", 40, 50, 10, pr.WHITE)
         pr.draw_text(f"$: {Com.costUpdateBullet}", 80, 50, 10, pr.GREEN)
 
-        self.updateProtectButton = pr.gui_button(pr.Rectangle(10, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
-        pr.draw_text_ex(self.font, "Protect Update", pr.Vector2(40, 60), 20, 0, pr.WHITE)
-        pr.draw_text(f"Level: {Com.updateProtectLevel}", 40, 80, 10, pr.WHITE)
-        pr.draw_text(f"$: {Com.costProtectBullet}", 80, 80, 10, pr.GREEN)
 
         self.emButton = pr.gui_button(pr.Rectangle(145, 60, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
         pr.draw_text_ex(self.font, "Ammo from Temu", pr.Vector2(182, 60), 20, 0, pr.WHITE)
@@ -384,12 +402,16 @@ class GameOver(Screen):
         self.backButton = 0
 
     def Update(self):
-        pass
+        if self.backButton == 1:
+            self.finishScreen = 1
 
     def Draw(self):
+        pr.begin_drawing()
+        pr.clear_background(pr.BLACK)
         pr.draw_text("GAME OVER", 10, 10, 50, pr.RED)
         pr.draw_text(f"Money:{Com.money}", 10, 50, 20, pr.WHITE)
-        self.backButton = pr.gui_button(pr.Rectangle(10, 400, 100, 200), "Back to menu")
+        self.backButton = pr.gui_button(pr.Rectangle(10, 400, 200, 100), "Back to menu")
+        pr.end_drawing()
 
 
     def Unload(self):

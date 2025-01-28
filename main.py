@@ -43,6 +43,11 @@ class Game:
             elif self.screen.finishScreen == 2:
                 self.screen.Unload()
                 self.screen = Scenes.GameOver()
+        elif self.screen.screenId == 4:
+            if self.screen.finishScreen == 1:
+                self.screen.Unload()
+                self.screen = Scenes.Menu()
+        
     
     
 
