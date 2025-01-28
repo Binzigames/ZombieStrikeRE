@@ -24,7 +24,7 @@ class ZVOmbie:
         if not self.destroyed:
             self.rect = pr.Rectangle(self.x, self.y, 29, 39)
             if not self.stop == True:
-                self.x -= 1
+                self.x -= 1  # Ворог рухається ліворуч
 
             self.frame += 1
             self.i = (self.frame // 10) % len(self.textures)
@@ -45,12 +45,11 @@ class ZVOmbie:
             pr.draw_texture_pro(
                 current_texture,
                 pr.Rectangle(0, 0, current_texture.width, current_texture.height),
-                pr.Rectangle(self.x, self.y, 29, 39),
+                pr.Rectangle(self.x, self.y, 29*2, 39*2),
                 pr.Vector2(0, 0),
                 0,
                 pr.WHITE
             )
-
 
 
 

@@ -7,11 +7,11 @@ class PPO:
         self.x = x
         self.y = y
         self.destroyed = False  # Флаг для знищення кулі
-        self.rectangle = pr.Rectangle(self.x, self.y, 3, 3)  # Рект кулі
+        self.rectangle = pr.Rectangle(self.x, self.y, 5, 5)  # Рект кулі
 
     def Draw(self):
         if not self.destroyed:  # Малюємо тільки, якщо куля існує
-            pr.draw_circle_v(pr.Vector2(self.x, self.y), 3, pr.YELLOW)
+            pr.draw_circle_v(pr.Vector2(self.x, self.y), 5, pr.YELLOW)
 
     def Update(self):
         if not self.destroyed:  # Оновлення, якщо куля ще не знищена

@@ -59,10 +59,8 @@ class Logo(Screen):
         pr.clear_background(pr.GRAY)
         pr.draw_texture_pro(self.logo, pr.Rectangle(0, 0, 256, 256), pr.Rectangle(pr.get_screen_width()/2, pr.get_screen_height()/2, 256, 256), pr.Vector2(256/2, 256/2), self.rot, pr.Color(255, 255, 255, self.alpha))
         
-        pr.draw_text(f"{self.ppo}", 10, 10, 10, pr.WHITE)
         pr.draw_text_ex(self.font, "Created with Raylib", pr.Vector2(200+5, 500+5), 50, 1, pr.Color(0, 0, 0, self.alpha))
         pr.draw_text_ex(self.font, "Created with Raylib", pr.Vector2(200, 500), 50, 1, pr.Color(255, 255, 255, self.alpha))
-        pr.draw_fps(0, 550)
         pr.end_drawing()
 
     def Unload(self):
@@ -208,11 +206,10 @@ class Game(Screen):
     def __init__(self):
         super().__init__()
         self.screenId = 3
-        self.BGTexture = pr.load_texture("Assets/game/BG.png")
+        self.BGTexture = pr.load_texture("Assets/BG.png")
         self.font = pr.load_font("Assets/pizda.fnt")
         self.natural = 1
         self.gay = False # Ти для мене бужеш True
-        self.trans = 0
         self.updateBulletButton = 0
         self.updateProtectButton = 0
         self.emo = 50
@@ -244,7 +241,6 @@ class Game(Screen):
 
     def Update(self):
         if self.gay == False:
-            self.trans += 1
             self.vagnerTime -= 1
             if self.vagnerTime == 0 and not self.vagnerTime < 0 :
                 self.vagnerTime = self.vagnersTimeLimit
@@ -261,7 +257,7 @@ class Game(Screen):
                 if self.emo >= 0:
                     SM.choise_button_sound(3)
                     self.emo -= 1
-                    self.bullets.append(PPO.PPO(145,470))
+                    self.bullets.append(PPO.PPO(270,490))
                 else:
                     SM.choise_button_sound(4)
 
@@ -287,7 +283,7 @@ class Game(Screen):
                         SM.choise_button_sound(3)
                         self.timeKillyourself = self.timeKillyourselflimit
                         self.emo -= 1
-                        self.bullets.append(PPO.PPO(145,470))
+                        self.bullets.append(PPO.PPO(270,490))
                     else:
                         SM.choise_button_sound(4)
                         print("Not enought emo, bum")
@@ -346,9 +342,8 @@ class Game(Screen):
     def Draw(self):
         pr.begin_drawing()
         pr.clear_background(pr.BLACK)
-        pr.draw_texture(self.BGTexture, 0, 0, pr.WHITE)
+        pr.draw_texture_pro(self.BGTexture, pr.Rectangle(0, 0, 440, 320), pr.Rectangle(0, 0, 800, 600), pr.Vector2(0, 0), 0, pr.WHITE)
         pr.draw_text(f"money : ", 10, 10, 10, pr.WHITE)
-        pr.draw_circle_v(pr.Vector2(300, 300 + 30 * math.cos(self.trans/30)), 10, pr.WHITE)
         pr.draw_text(f"$: {Com.money}", 50, 10, 10, pr.GREEN)
 
         self.updateBulletButton = pr.gui_button(pr.Rectangle(10, 30, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_ARROW_UP_FILL, ""))
@@ -372,7 +367,7 @@ class Game(Screen):
         for i in range(len(self.bullets)):
                 self.bullets[i].Draw()
 
-        pr.draw_text(f"AMMO: {self.emo}", 100, 500, 10, pr.WHITE)
+        pr.draw_text(f"AMMO: {self.emo}", 220, 500, 10, pr.WHITE)
         pr.draw_text(f"HP:{Vagner.pHP}", 240, 30, 30, pr.WHITE)
 
 
