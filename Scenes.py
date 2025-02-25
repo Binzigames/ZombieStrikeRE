@@ -74,6 +74,7 @@ class Logo2(Screen):
         super().__init__()
         self.screenId = 1
         self.texture1 = pr.load_texture("Assets/logo_porko.png")
+        self.texture3 = pr.load_texture("Playmanity API/IMGS/Playmanity Logo.png")
         self.texture2 = pr.load_texture("Assets/pigaysus_logo.png")
         self.font = pr.load_font("Assets/pizda.fnt")
         self.alpha = 0
@@ -99,6 +100,20 @@ class Logo2(Screen):
         pr.draw_texture_pro(self.texture2, pr.Rectangle(0, 0, 883, 126), pr.Rectangle(200, 400, 120+400, 139+100), pr.Vector2((120+100)/2, (139+100)/2), 0, pr.Color(255, 255, 255, self.alpha))
         pr.draw_text_ex(self.font, "Guy who makes original game", pr.Vector2(150, 20), 25, 0, pr.Color(255, 255, 255, self.alpha))
         pr.draw_text_ex(self.font, "Guy who helps with remake of game", pr.Vector2(150, 270), 25, 0, pr.Color(255, 255, 255, self.alpha))
+        #playmanity
+        position = pr.Vector2(550, 20)
+
+        pr.draw_text_ex(self.font, "our sponsors", position, 25, 0, pr.Color(255, 255, 255, self.alpha))
+        pr.draw_text_ex(self.font, "Playmanity.net", (position.x  , position.y + 120), 25, 0, pr.Color(255, 255, 255, self.alpha))
+
+        pr.draw_texture_pro(
+            self.texture3,
+            pr.Rectangle(0, 0, 512, 526),
+            pr.Rectangle(position.x, position.y + 25, 90, 90),
+            pr.Vector2(0, 0),
+            0,
+            pr.Color(255, 255, 255, self.alpha)
+        )
         pr.end_drawing()
 
     def Unload(self):
