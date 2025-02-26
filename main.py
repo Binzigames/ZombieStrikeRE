@@ -1,7 +1,6 @@
 import pyray as pr
 import Scenes
 
-
 class Game:
     def __init__(self):
         pr.init_window(800, 600, "ZombieStrikeRE")
@@ -55,3 +54,4 @@ class Game:
 if __name__ == "__main__":
     gam = Game()
     gam.Run()
+    

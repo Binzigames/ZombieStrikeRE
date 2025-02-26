@@ -1,5 +1,10 @@
 from idlelib.mainmenu import menudefs
 
+import requests
+from PIL import Image
+from io import BytesIO
+
+
 import pyray as pr
 import math
 
@@ -10,6 +15,8 @@ import ZVOmbie as Vagner
 import PPO
 
 import SoundManager as SM
+
+import AD
 
 class Screen:
     def __init__(self):
@@ -73,9 +80,12 @@ class Logo2(Screen):
     def __init__(self):
         super().__init__()
         self.screenId = 1
+        self.pizdec = requests.get("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoCiH1vPE-2PH7cFTYZeUWNcyMGV2xMcmMKw&s")
+        self.urlimage = Image.open(BytesIO(self.pizdec.content))
+        self.urlimage.save("ad.png")
         self.texture1 = pr.load_texture("Assets/logo_porko.png")
-        self.texture3 = pr.load_texture("Playmanity API/IMGS/Playmanity Logo.png")
-        self.texture2 = pr.load_texture("Assets/pigaysus_logo.png")
+        self.texture3 = pr.load_texture("PlaymanityAPI/IMGS/Playmanity Logo.png")
+        self.texture2 = pr.load_texture("ad.png")
         self.font = pr.load_font("Assets/pizda.fnt")
         self.alpha = 0
         self.count = 300
@@ -252,6 +262,10 @@ class Game(Screen):
         Com.costProtectBullet = 100
         Com.updateBulletLevel = 1
         Com.updateProtectLevel = 1
+        self.ads = []
+        self.ads.append(AD.Ad("sdsad"))
+
+
 
 
     def Update(self):
@@ -343,6 +357,11 @@ class Game(Screen):
         elif self.natural == 1 and self.gay == True:
             self.gay = False
 
+        for i in range(len(self.ads)):
+            self.ads[i].update()
+            if self.ads[i].dell == True:
+                self.ads.pop(i)
+
     def CheckCollisions(self):
         # Перевірка колізій між кулею та ворогом
         for bullet in self.bullets:
@@ -399,6 +418,9 @@ class Game(Screen):
 
 
         self.natural = pr.gui_button(pr.Rectangle(800-50, 20, 25, 25), pr.gui_icon_text(pr.GuiIconName.ICON_GEAR_BIG, ""))
+
+        for i in range(len(self.ads)):
+            self.ads[i].draw()
         pr.end_drawing()
 
     def Unload(self):
