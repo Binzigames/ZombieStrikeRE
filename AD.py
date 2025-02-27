@@ -1,8 +1,13 @@
 import pyray as pr
+import PlaymanityAPI.SDK as sdk
+from PIL import Image
+from io import BytesIO
 
 class Ad:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self):
+        self.url = sdk.get_photoURL()
+        self.uimage = Image.open(BytesIO(self.url))
+        self.uimage.save("ad.png")
         self.image = pr.load_texture("ad.png")
         self.timer = 200
         self.dell = False

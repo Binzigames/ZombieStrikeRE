@@ -1,10 +1,13 @@
 import pyray as pr
 import Scenes
+import PlaymanityAPI.SDK as sdk
 
 class Game:
     def __init__(self):
         pr.init_window(800, 600, "ZombieStrikeRE")
+        sdk.init_api()
         pr.set_target_fps(60)
+
         self.screen = Scenes.Logo()
         self.ico = pr.load_image("Assets/ico.png")
         pr.set_window_icon(self.ico)

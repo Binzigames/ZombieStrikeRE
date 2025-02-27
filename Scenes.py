@@ -263,7 +263,7 @@ class Game(Screen):
         Com.updateBulletLevel = 1
         Com.updateProtectLevel = 1
         self.ads = []
-        self.ads.append(AD.Ad("sdsad"))
+        self.ads.append(AD.Ad())
 
 
 
