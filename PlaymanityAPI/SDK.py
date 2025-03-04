@@ -1,40 +1,56 @@
-import API
-#---------------------------------> strings and bools for use
+import PlaymanityAPI.API as API
+
+#---------------------------------> Strings and bools for use
 photoURL = None
 ADinfo = None
 Isactive = False
 ADurl = None
-#---------------------------------> functions to use (this one load the strings and bools)
-#start api (+check files, if game_uuid or device_id = 0, it will be changed for basic (debug))
-def init_api():
+
+gUUID = None
+dID = None
+
+#---------------------------------> Functions to use
+def init_api(global_gUUID, global_dID):
+    global gUUID, dID
+    gUUID, dID = global_gUUID, global_dID
     API.check_sdk()
-    API.main(0, 0)
-#get functions (load for user information)
+    API.main(gUUID, dID)
+
+def get_ad_data():
+    response = API.get_ad(gUUID , dID)
+    if response and isinstance(response, dict):
+        return response
+    return {}
+
 def get_photoURL():
     global photoURL
-    response = API.get_ad()
-    if response and "media" in response:
-        photoURL = response
-    return
+    response = get_ad_data()
+    photoURL = response.get("media", None)
+    return photoURL
 
 def get_ad_info():
     global ADinfo
-    response = API.get_ad()
-    if response:
-        ADinfo = response
-    return
+    ADinfo = get_ad_data()
+    return ADinfo
+
 def get_url():
     global ADurl
-    response = API.get_ad()
-    if response and "url" in response:
-        ADurl = response
-    return
+    response = get_ad_data()
+    ADurl = response.get("url", None)
+    return ADurl
+
 def get_IsActive():
     global Isactive
-    response = API.get_ad()
-    if response and "isActive" in response:
-        Isactive = response
-    return
-#---------------------------------> debug
+    response = get_ad_data()
+    Isactive = response.get("isActive", False)
+    return Isactive
+
+#---------------------------------> Debug
 #if __name__ == "__main__":
-    #init_api()
+    #test_gUUID = "test_uuid"
+    #test_dID = "test_did"
+    #init_api(test_gUUID, test_dID)
+    #print("Photo URL:", get_photoURL())
+    #print("Ad Info:", get_ad_info())
+    #print("Ad URL:", get_url())
+    #print("Is Active:", get_IsActive())

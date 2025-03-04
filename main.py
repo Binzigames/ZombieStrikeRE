@@ -5,7 +5,7 @@ import PlaymanityAPI.SDK as sdk
 class Game:
     def __init__(self):
         pr.init_window(800, 600, "ZombieStrikeRE")
-        sdk.init_api()
+        sdk.init_api("e63554d2-1bbb-4aa9-aa98-b06edad45e1e" , 0)
         pr.set_target_fps(60)
 
         self.screen = Scenes.Logo()
@@ -15,8 +15,7 @@ class Game:
 
     def Run(self):
         while not pr.window_should_close():
-            if pr.is_key_down(pr.KeyboardKey.KEY_F11):
-                pr.toggle_fullscreen()
+            sdk.get_IsActive()
             self.ScreenUpdate()
         pr.close_window()
 
